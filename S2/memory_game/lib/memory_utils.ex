@@ -73,14 +73,12 @@ defmodule MemoryGame.MemoryUtils do
     #  {11, 8} =>  {"B", "b", :consonante, :notfound}
     # }
 
-    IO.inspect(sel_letters)
-    map = Enum.flat_map(sel_letters, fn {x, y} -> x end)
-
+    #IO.inspect(sel_letters)
   end
 
   def raw_positions(pos_pares, sel_letters) do
     #Por completar: Generar un mapa donde la clave sea el número/posición y el valor la letra.
-    Enum.flat_map(sel_letters, fn {x, y} -> x..y end)
+    Enum.flat_map(sel_letters, fn {x, y} -> x end)
 
   end
 
