@@ -24,3 +24,5 @@ rock_paper_scissors-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+.idea

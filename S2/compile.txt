@@ -1,0 +1,4 @@
+c("lib/memory_utils.ex")  
+c("lib/memory_tasks.ex")
+alias MemoryGame.MemoryTasks
+MemoryTasks.init_game
