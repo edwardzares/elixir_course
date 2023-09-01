@@ -13,7 +13,6 @@ defmodule MemoryGame.MemoryTasks do
     username = IO.gets("Ingrese nickname: ") |> String.trim
     sel_letters = selected_letters(alphabet_map())
     solved = load_board(sel_letters)
-
     game(board,solved, username, 3, 0, 0)
 
   end
@@ -34,7 +33,7 @@ defmodule MemoryGame.MemoryTasks do
                |> List.to_tuple
 
     #Las coordenadas recibidas, invertirlas.
-    ing_pair_r = ing_pair |> Tuple.to_list |> Enum.reverse |> List.to_tuple
+    #ing_pair_r = ing_pair |> Tuple.to_list |> Enum.reverse |> List.to_tuple
 
     #Construyendo los pares {{letra1, posicion1},{letra2,posicion2}} que corresponde a la coordenada ingresada.
     {pair1, pair2} = raw_positions(Map.keys(solved_board),Map.values(solved_board))
@@ -43,12 +42,29 @@ defmodule MemoryGame.MemoryTasks do
     #Mostrar la selección en el tablero utilizando lo anterior
     IO.puts(reveal_cards(board_on, pair1, pair2))
 
+    if String.downcase(elem(pair1, 1)) == String.downcase(elem(pair2, 1)) do
+
+      case is_consonant_or_vowel(pair1) do
+        {:vocal} ->
+          updated_board = reveal_cards(board_on, pair1, pair2)
+          game(updated_board, solved_board, player, lifes, acc_v + 1, acc_c)
+        {:consonante}  ->
+          updated_board = reveal_cards(board_on, pair1, pair2)
+          game(updated_board, solved_board, player, lifes, acc_v, acc_c + 1)
+      end
+
+    else
+
+      IO.puts("Incorrect! Let's try again.")
+      game(board_on, solved_board, player, lifes - 1, acc_v, acc_c)
+
+    end
+
     #Por completar:
     #Ver si el par ingresado es correcto, ver si corresponde a vocal o consonante, incrementar el respectivo contador y actualizar el estado del par a :found
     #Controlar si vuelve a ingresar la misma coordenada ya encontrada, mostrando un mensaje apropiado
     #Controlar si el par no es válido, mostrando un mensaje apropiado
     #Controlar que si el par es correcto, no volverlo a cubrir, debe quedar revelado.
-
 
   end
 
@@ -65,4 +81,4 @@ defmodule MemoryGame.MemoryTasks do
 
 end
 
-#c("lib/memory/memory_tasks.ex")
+#c("lib/memory_tasks.ex")

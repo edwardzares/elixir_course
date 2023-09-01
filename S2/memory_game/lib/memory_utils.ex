@@ -33,7 +33,6 @@ defmodule MemoryGame.MemoryUtils do
 
   def get_vowels(_, l_vowels), do: l_vowels
 
-
   #Obtener las consonantes a jugar
   def get_consonants(alpha_map, l_conson) when length(l_conson) < 3 do
     claves_consonantes= Enum.filter(alpha_map, fn{_k,v} -> elem(v,2) == :consonante end) |> Enum.into(%{}) |> Map.keys
@@ -57,7 +56,8 @@ defmodule MemoryGame.MemoryUtils do
                 |> Enum.chunk_every(2)
                 |> Enum.map(fn [a, b] -> {a, b} end)
                 |> Enum.zip(sel_letters)
-                |> Map.new
+
+    pos_pares |> Map.new
 
     #Resultado esperado (ejemplo que varía por la aleatoriedad): 1..12 > [1,2,3,4...,12] > [5,1,6,7,...,9,8] > [[5, 1], [6, 7], ..., [9, 8]] > [{5, 1}, {6, 7}, ..., {9, 8}]
 
@@ -73,17 +73,24 @@ defmodule MemoryGame.MemoryUtils do
     #  {11, 8} =>  {"B", "b", :consonante, :notfound}
     # }
 
-    #IO.inspect(sel_letters)
   end
 
   def raw_positions(pos_pares, sel_letters) do
     #Por completar: Generar un mapa donde la clave sea el número/posición y el valor la letra.
-    Enum.flat_map(sel_letters, fn {x, y} -> x end)
-
+    Enum.zip(
+      Enum.flat_map(pos_pares, fn {x, y} -> [x,y] end),
+      Enum.flat_map(sel_letters, fn {x, y, _w, _z} -> [x,y] end))
+    |> Map.new
   end
 
-
+  def is_consonant_or_vowel(par) do
+    vowels = ["a", "e", "i", "o", "u"]
+    case String.downcase(elem(par,1)) in vowels do
+      true -> {:vocal}
+      false -> {:consonante}
+    end
+  end
 
 end
 
-#c("lib/memory/memory_utils.ex")
+#c("lib/memory_utils.ex")
